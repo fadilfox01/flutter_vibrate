@@ -18,7 +18,8 @@ class Vibrate {
   static const Duration defaultVibrationDuration = Duration(milliseconds: 500);
 
   /// Vibrate for 500ms on Android, and for the default time on iOS (about 500ms as well)
-  static Future vibrate({Duration duration = defaultVibrationDuration}) => _channel.invokeMethod(
+  static Future vibrate({Duration duration = defaultVibrationDuration}) =>
+      _channel.invokeMethod(
         'vibrate',
         {'duration': duration.inMilliseconds},
       );
@@ -63,14 +64,15 @@ class Vibrate {
   /// Will always vibrate once before the first pause
   /// and once after the last pause
 
-  static Future vibrateWithPauses(Iterable<Duration> pauses, {Duration duration = defaultVibrationDuration}) async {
+  static Future vibrateWithPauses(Iterable<Duration> pauses,
+      {Duration duration = defaultVibrationDuration}) async {
     for (final Duration d in pauses) {
-      await vibrate();
+      await vibrate(duration: duration);
       //Because the native vibration is not awaited, we need to wait for
       //the vibration to end before launching another one
       await Future.delayed(duration);
       await Future.delayed(d);
     }
-    await vibrate();
+    await vibrate(duration: duration);
   }
 }
